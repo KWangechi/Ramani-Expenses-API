@@ -41,7 +41,7 @@ class ExpenseController extends Controller
      */
     public function create()
     {
-        //
+        dd('Creat method!');
     }
 
     /**
@@ -102,7 +102,7 @@ class ExpenseController extends Controller
      */
     public function show($id)
     {
-        $expense = Expense::findOrFail($id);
+        $expense = Expense::find($id);
 
         if (!$expense) {
             return response()->json([
@@ -140,7 +140,7 @@ class ExpenseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $expense  = Expense::findOrFail($id);
+        $expense  = Expense::find($id);
 
         if (!$expense) {
             return response()->json([
@@ -165,6 +165,8 @@ class ExpenseController extends Controller
                 ]);
             }
         }
+
+        // dd($expense);
     }
 
     /**
@@ -175,29 +177,30 @@ class ExpenseController extends Controller
      */
     public function destroy($id)
     {
-        $expense = Expense::findOrFail($id);
+        $expense = Expense::find($id);
 
-        if (!$expense) {
-            return response()->json([
-                'success' => false,
-                'message' => 'No record found',
-                'status_code' => Response::HTTP_NOT_FOUND
-            ]);
-        } else {
-            if (!($expense->delete())) {
+            if (!$expense) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Something went wrong try again',
-                    'status_code' => Response::HTTP_REQUEST_TIMEOUT,
+                    'message' => 'No record found',
+                    'status_code' => Response::HTTP_NOT_FOUND
                 ]);
             } else {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Expense updated successfully!!',
-                    'status_code' => Response::HTTP_OK,
-                    'data' => $expense
-                ]);
+                if (!($expense->delete())) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Something went wrong try again',
+                        'status_code' => Response::HTTP_REQUEST_TIMEOUT,
+                    ]);
+                } else {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Expense deleted successfully',
+                        'status_code' => Response::HTTP_OK,
+                    ]);
+                }
             }
-        }
+
+        // dd($expense);
     }
 }

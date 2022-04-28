@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix");
 
 /*
  |--------------------------------------------------------------------------
@@ -11,7 +11,38 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
+mix.js("resources/js/app.js", "public/js").postCss(
+    "resources/css/app.css",
+    "public/css",
+    [
         //
-    ]);
+    ]
+);
+
+// mix.copy(
+//     "ramani-expenses-frontend/src/index.template.html",
+//     "resources/views/index.blade.php"
+// ).copyDirectory("ramani-expenses-frontend/src", "public");
+
+
+mix
+.copy('ramani-expenses-frontend/dist/spa/index.html', 'resources/views/index.blade.php')
+.copyDirectory('ramani-expenses-frontend/dist/spa', 'public');
+
+// mix
+// .copy('ramani-expenses-frontend/src', 'resources/views/index.blade.php')
+// .copyDirectory('ramani-expenses-frontend/dist/spa', 'public');
+
+mix.webpackConfig({
+    module: {
+        rules: [
+            {
+                test: /\.mjs$/,
+                resolve: { fullySpecified: false },
+                include: /node_modules/,
+                type: "javascript/auto",
+            },
+        ],
+    },
+});
+

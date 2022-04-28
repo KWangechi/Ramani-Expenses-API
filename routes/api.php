@@ -14,16 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 //expenses endpoints
-Route::prefix('expenses')->group(function (){
+Route::prefix('expenses')->group(function () {
     Route::get('/',  [App\Http\Controllers\Api\ExpenseController::class, 'index']);
     Route::post('/create',  [App\Http\Controllers\Api\ExpenseController::class, 'store']);
-    Route::patch('/patch',  [App\Http\Controllers\Api\ExpenseController::class, 'update']);
-    Route::delete('/delete',  [App\Http\Controllers\Api\ExpenseController::class, 'destroy']);
-
+    Route::get('/{id}', [App\Http\Controllers\Api\ExpenseController::class, 'show']);
+    Route::patch('/{id}',  [App\Http\Controllers\Api\ExpenseController::class, 'update']);
+    Route::delete('{id}',  [App\Http\Controllers\Api\ExpenseController::class, 'destroy']);
 });
 
+Route::get('/create_method', [App\Http\Controllers\Api\ExpenseController::class, 'create']);
