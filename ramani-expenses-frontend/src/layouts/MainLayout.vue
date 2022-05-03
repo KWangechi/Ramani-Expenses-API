@@ -16,9 +16,26 @@
           Ramani Application
         </q-toolbar-title>
 
-        <!-- <div>Quasar v{{ $q.version }}</div> -->
+        {{dateToday}}
       </q-toolbar>
     </q-header>
+
+<q-footer class="bg-white small-screen-only" bordered>
+        <q-tabs
+        class="text-grey-10"
+        active-color="primary"
+        indicator-color="transparent"
+      >
+        <q-route-tab name="expenses" icon="money" label="Expenses" to="/expenses" />
+        <q-route-tab
+          name="calendar"
+          icon="eva-calendar"
+          label="Calendar"
+          to="/calendar"
+        />
+      </q-tabs>
+      </q-footer>
+
 
     <q-page-container>
       <router-view />
@@ -28,6 +45,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
+import { date } from 'quasar'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -41,6 +59,15 @@ export default defineComponent({
     console.log('MainLayout Mounted in Laravel')
   },
   methods:{
+  },
+  computed:{
+    dateToday(){
+      let timeStamp = Date.now()
+
+      let format = date.formatDate(timeStamp, 'ddd Do MMMM YYYY HH:mm:ss');
+
+      return format;
+    }
   }
 })
 </script>
