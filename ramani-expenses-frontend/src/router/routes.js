@@ -3,6 +3,8 @@ import IndexPage from 'pages/IndexPage.vue'
 import CalendarPage from 'pages/CalendarPage.vue'
 
 import ExpensesPage from 'pages/ExpensesPage.vue'
+import CreateExpensePage from 'pages/CreateExpensePage.vue'
+
 const routes = [
   {
     path: '/',
@@ -11,6 +13,8 @@ const routes = [
       { path: '', component: IndexPage },
       { path: '/expenses', component: ExpensesPage},
       { path: '/calendar', component: CalendarPage},
+      { path: '/create-expense', component: CreateExpensePage},
+
 
 
     ]

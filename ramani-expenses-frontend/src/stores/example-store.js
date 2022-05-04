@@ -1,15 +1,37 @@
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
+import { api } from "src/boot/axios";
+import { store } from "quasar/wrappers";
 
-export const useCounterStore = defineStore('counter', {
+
+export const useExpenseStore = defineStore("expense", {
   state: () => ({
-    counter: 0,
+    expense: {},
+    expenses: [],
   }),
+
   getters: {
-    doubleCount: (state) => state.counter * 2,
+    newExpense: (state) => state.expense,
+    allExpenses: (state) => state.expenses,
   },
+
   actions: {
-    increment() {
-      this.counter++;
+    async createExpense(expense) {
+
+      console.log("Create expense method");
+    },
+
+    getAllExpenses() {
+      api
+        .get("/expenses")
+        .then(({ data: { data } }) => {
+          this.expenses = data;
+
+          console.log("Get all expenses");
+          console.log(this.expenses);
+        })
+        .catch((errors) => {
+          console.log(errors);
+        });
     },
   },
 });

@@ -1,7 +1,10 @@
 <template>
-<div>
+<q-layout view="lHh Lpr lFf">
+<div  class="text-center">
   Calendar Page
 </div>
+
+</q-layout>
 </template>
 
 <script>

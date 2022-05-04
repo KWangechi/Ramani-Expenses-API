@@ -13,7 +13,7 @@
         />
 
         <q-toolbar-title>
-          Ramani Application
+          Ramani Expense
         </q-toolbar-title>
 
         {{dateToday}}
@@ -25,6 +25,8 @@
         class="text-grey-10"
         active-color="primary"
         indicator-color="transparent"
+        align="justify"
+        :breakpoint="0"
       >
         <q-route-tab name="expenses" icon="money" label="Expenses" to="/expenses" />
         <q-route-tab
