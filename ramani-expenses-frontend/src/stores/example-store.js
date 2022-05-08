@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 import { api } from "src/boot/axios";
 import { store } from "quasar/wrappers";
 
-
 export const useExpenseStore = defineStore("expense", {
   state: () => ({
     expense: {},
@@ -15,9 +14,15 @@ export const useExpenseStore = defineStore("expense", {
   },
 
   actions: {
-    async createExpense(expense) {
-
-      console.log("Create expense method");
+    async createExpense(newExpense) {
+      api
+        .post("/expenses/create", newExpense)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((errors) => {
+          console.log(errors);
+        });
     },
 
     getAllExpenses() {

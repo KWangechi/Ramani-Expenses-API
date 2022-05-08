@@ -41,7 +41,7 @@ class ExpenseController extends Controller
      */
     public function create()
     {
-        dd('Creat method!');
+        dd('Create method!');
     }
 
     /**
