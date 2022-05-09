@@ -24,7 +24,7 @@ Route::prefix('expenses')->group(function () {
     Route::post('/create',  [App\Http\Controllers\Api\ExpenseController::class, 'store']);
     Route::get('/{id}', [App\Http\Controllers\Api\ExpenseController::class, 'show']);
     Route::patch('/{id}',  [App\Http\Controllers\Api\ExpenseController::class, 'update']);
-    Route::delete('{id}',  [App\Http\Controllers\Api\ExpenseController::class, 'destroy']);
+    Route::delete('/{id}',  [App\Http\Controllers\Api\ExpenseController::class, 'destroy']);
 });
 
 // Route::get('/create_method', [App\Http\Controllers\Api\ExpenseController::class, 'create']);

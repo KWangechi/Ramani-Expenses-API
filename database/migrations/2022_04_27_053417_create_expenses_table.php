@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('employee_name');
             $table->string('department');
             $table->double('project_no');
             $table->string('description');
@@ -23,7 +23,8 @@ return new class extends Migration
             $table->string('currency');
             $table->string('expense_type');
             $table->string('transaction_type');
-            $table->text('receipt_photo');
+            $table->text('receipt_photo_name')->default("")->nullable();
+            $table->text('receipt_photo_path')->default("")->nullable();
             $table->date('date_issued');
 
             // $table->softDeletes();

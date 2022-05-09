@@ -4,6 +4,7 @@ import CalendarPage from 'pages/CalendarPage.vue'
 
 import ExpensesPage from 'pages/ExpensesPage.vue'
 import CreateExpensePage from 'pages/CreateExpensePage.vue'
+import OneExpense from 'pages/OneExpense.vue'
 
 const routes = [
   {
@@ -14,6 +15,8 @@ const routes = [
       { path: '/expenses', component: ExpensesPage},
       { path: '/calendar', component: CalendarPage},
       { path: '/create-expense', component: CreateExpensePage},
+      { path: '/expense/:id', component: OneExpense},
+
 
 
 

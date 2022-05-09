@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { api } from "src/boot/axios";
-import { store } from "quasar/wrappers";
 
 export const useExpenseStore = defineStore("expense", {
   state: () => ({
@@ -14,17 +13,19 @@ export const useExpenseStore = defineStore("expense", {
   },
 
   actions: {
-    async createExpense(newExpense) {
+    getOneExpense(id) {
       api
-        .post("/expenses/create", newExpense)
+        .get("/expenses/", id)
         .then((response) => {
+          this.expense = response.data.data;
           console.log(response);
         })
         .catch((errors) => {
           console.log(errors);
         });
-    },
 
+      // console.log(id)
+    },
     getAllExpenses() {
       api
         .get("/expenses")
@@ -37,6 +38,46 @@ export const useExpenseStore = defineStore("expense", {
         .catch((errors) => {
           console.log(errors);
         });
+    },
+
+    editExpense(id) {
+      api
+        .patch("/expenses" + id)
+        .then((response) => {
+          if (response.data.message) {
+            this.$q.notify({
+              message: response.data.message,
+              color: light - green,
+            });
+            console.log(response);
+          } else {
+            this.$q.notify({
+              message: response.data.message,
+              color: red,
+            });
+          }
+        })
+        .catch((errors) => {
+          console.log(errors);
+        });
+    },
+    deleteExpense(id) {
+      api.delete("/expenses/" + id).then((response) => {
+        console.log(response);
+
+        if (response.data.message) {
+          this.$q.notify({
+            message: response.data.message,
+            color: light - green,
+          });
+          console.log(response);
+        } else {
+          this.$q.notify({
+            message: response.data.message,
+            color: red,
+          });
+        }
+      });
     },
   },
 });

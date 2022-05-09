@@ -53,7 +53,7 @@ class ExpenseController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'employee_name' => 'required',
             'department' => 'required',
             'project_no' => 'required',
             'description' => 'required',
@@ -61,12 +61,18 @@ class ExpenseController extends Controller
             'currency' => 'required',
             'expense_type' => 'required',
             'transaction_type' => 'required',
-            'receipt_photo' => 'required|image|mimes:jpg,jpeg,png,gif,svg',
+            'receipt_photo' => 'required|mimes:jpg,jpeg,png,gif,svg',
             'date_issued' => 'required|date'
         ]);
 
+
+        //image upload
+        $file_name = time() . '_' . $request->receipt_photo->getClientOriginalName();
+        $file_path = $request->file('receipt_photo')->storeAs('images', $file_name, 'public');
+
+
         $expense = Expense::create([
-            'name' => $request->name,
+            'employee_name' => $request->employee_name,
             'department' => $request->department,
             'project_no' => $request->project_no,
             'description' => $request->description,
@@ -74,9 +80,12 @@ class ExpenseController extends Controller
             'currency' => $request->currency,
             'expense_type' => $request->expense_type,
             'transaction_type' => $request->transaction_type,
-            'receipt_photo' => $request->file('receipt_photo')->store('public/images',),
+            'receipt_photo_name' => time() . '_' . $request->receipt_photo->getClientOriginalName(),
+            'receipt_photo_path' => $file_path,
             'date_issued' => $request->date_issued
         ]);
+
+        // dd($expense);
 
         if (!$expense) {
             return response()->json([
@@ -179,27 +188,27 @@ class ExpenseController extends Controller
     {
         $expense = Expense::find($id);
 
-            if (!$expense) {
+        if (!$expense) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No record found',
+                'status_code' => Response::HTTP_NOT_FOUND
+            ]);
+        } else {
+            if (!($expense->delete())) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No record found',
-                    'status_code' => Response::HTTP_NOT_FOUND
+                    'message' => 'Something went wrong try again',
+                    'status_code' => Response::HTTP_REQUEST_TIMEOUT,
                 ]);
             } else {
-                if (!($expense->delete())) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Something went wrong try again',
-                        'status_code' => Response::HTTP_REQUEST_TIMEOUT,
-                    ]);
-                } else {
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Expense deleted successfully',
-                        'status_code' => Response::HTTP_OK,
-                    ]);
-                }
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Expense deleted successfully',
+                    'status_code' => Response::HTTP_OK,
+                ]);
             }
+        }
 
         // dd($expense);
     }

@@ -27,17 +27,18 @@ export default defineComponent({
           required: true,
           label: 'ID',
           field:'id',
-          align: 'left',
+          align: 'center',
           sortable: true
         },
-        { name: 'field_member_name', align: 'center', label: 'Field Agent Name', field: 'name', sortable: true },
+        { name: 'employee_name', align: 'center', label: 'Field Agent Name', field: 'employee_name', sortable: true },
         { name: 'department', align: 'center', label: 'Department', field: 'department', sortable: true },
         { name: 'project_no', align: 'center', label: 'Project number', field: 'project_no' },
         { name: 'description', align: 'center', label: 'Description', field: 'description' },
         { name: 'amount', align: 'center', label: 'Amount', field: 'amount' },
         { name: 'currency', align: 'center', label: 'Currency', field: 'currency', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
         { name: 'expense_type', align: 'center', label: 'Expense Type', field: 'expense_type', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-        { name: 'transaction_type', align: 'center', label: 'Transaction Type', field: 'transaction_type', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
+        { name: 'transaction_type', align: 'center', label: 'Transaction Type', field: 'transaction_type', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
+        
 
       ],
     };
@@ -57,7 +58,7 @@ export default defineComponent({
 
   },
   methods: {
-  
+
   },
 });
 </script>

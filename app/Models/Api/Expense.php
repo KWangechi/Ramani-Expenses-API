@@ -12,7 +12,7 @@ class Expense extends Model
 
     public $table = 'expenses';
 
-    protected $fillable = ['name', 'description', 'department', 'project_no', 'amount', 'currency', 'expense_type', 'transaction_type', 'receipt_photo', 'date_issued'];
+    protected $fillable = ['employee_name', 'description', 'department', 'project_no', 'amount', 'currency', 'expense_type', 'transaction_type', 'receipt_photo_name', 'receipt_photo_path', 'date_issued'];
 
 
     //relationships

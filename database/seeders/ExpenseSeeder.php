@@ -19,7 +19,7 @@ class ExpenseSeeder extends Seeder
         $expense = [
             [
                 "id" => 1,
-                "name" => "Charles Darwin",
+                "employee_name" => "Charles Darwin",
                 "department" => "Field Work",
                 "project_no" => "32856",
                 "description" => "Auditing of Sugar Cane Farms in Kabras",
@@ -34,7 +34,7 @@ class ExpenseSeeder extends Seeder
             ],
             [
                 "id" => 2,
-                "name" => "Jane Doe",
+                "employee_name" => "Jane Doe",
                 "department" => "Surveying",
                 "project_no" => "39999",
                 "description" => "Picking ground leveling of Uhuru Highway",
