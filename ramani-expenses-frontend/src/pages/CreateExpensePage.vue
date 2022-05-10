@@ -15,27 +15,29 @@
           id="expense_type" name="expense_type" />
         <q-select outlined v-model="newExpense.transaction_type" :options="transaction_types" label="Transaction Type"
           id="transaction_type" name="transaction_type" />
-        <!-- <q-file outlined color="primary" filled @change="onFileChange()" label="Photo Receipt" accept=".jpg, .png, .jpeg">
+
+        <q-file outlined color="primary" v-model="newExpense.receipt_photo" filled @change="onFileChange()" label="Photo Receipt" accept=".jpg, .png, .jpeg">
           <template v-slot:prepend>
             <q-icon name="cloud_upload" />
           </template>
-        </q-file> -->
+        </q-file>
 
-        <input type="file" name="receipt_photo" id="receipt_photo" v-on:change="onFileChange">
+        <!-- <input type="file" name="receipt_photo" id="receipt_photo" v-on:change="onFileChange"> -->
 
         <q-input outlined type="date" v-model="newExpense.date_issued" id="date_issued" name="date_issued" />
         <q-btn class="bg-primary text-center" type="submit" label="Create"></q-btn>
+        <q-btn class="bg-grey text-align-right" type="button" label="Cancel" to="/expenses"></q-btn>
+
       </q-form>
     </div>
   </q-layout>
 </template>
 
 <script>
-import { useExpenseStore } from "src/stores/example-store";
+
 import { defineComponent } from "vue";
-import { mapActions } from "pinia";
 import { api } from "src/boot/axios";
-import { Notify } from 'quasar'
+
 
 export default defineComponent({
   name: "CreateExpensePage",
@@ -76,7 +78,6 @@ export default defineComponent({
 
   methods: {
     async createNewExpense() {
-      const store = useExpenseStore();
       let formData = new FormData;
 
       formData.append('employee_name', this.newExpense.employee_name);
@@ -101,7 +102,8 @@ export default defineComponent({
           if (response.data.success) {
             this.$q.notify({
               message: response.data.message,
-              color: 'light-green'
+              textColor: 'white-10',
+              type:'positive'
             })
             console.log(response);
             window.location = "/expenses"
@@ -110,7 +112,8 @@ export default defineComponent({
           else {
             this.$q.notify({
               message: response.data.message,
-              color: 'red'
+              textColor: 'white-10',
+              type:'negative'
             })
           }
         })

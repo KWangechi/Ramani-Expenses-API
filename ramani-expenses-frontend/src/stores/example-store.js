@@ -12,20 +12,21 @@ export const useExpenseStore = defineStore("expense", {
     allExpenses: (state) => state.expenses,
   },
 
-  actions: {
-    getOneExpense(id) {
-      api
-        .get("/expenses/", id)
-        .then((response) => {
-          this.expense = response.data.data;
-          console.log(response);
-        })
-        .catch((errors) => {
-          console.log(errors);
-        });
+  mutations:{
+GET_ONE_EXPENSE(state, id){
+  api
+  .get(`/expenses/${id}`)
+  .then((response) => {
+    this.expense = response.data.data;
+   
+  })
+  .catch((errors) => {
+    console.log(errors);
+  });
+},
+},
 
-      // console.log(id)
-    },
+  actions: {
     getAllExpenses() {
       api
         .get("/expenses")
@@ -42,7 +43,7 @@ export const useExpenseStore = defineStore("expense", {
 
     editExpense(id) {
       api
-        .patch("/expenses" + id)
+        .patch("/expenses")
         .then((response) => {
           if (response.data.message) {
             this.$q.notify({

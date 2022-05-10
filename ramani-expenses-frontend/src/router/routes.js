@@ -15,7 +15,7 @@ const routes = [
       { path: '/expenses', component: ExpensesPage},
       { path: '/calendar', component: CalendarPage},
       { path: '/create-expense', component: CreateExpensePage},
-      { path: '/expense/:id', component: OneExpense},
+      { path: '/expenses/:id', component: OneExpense},
 
 
 
