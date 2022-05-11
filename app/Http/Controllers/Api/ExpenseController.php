@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Api\Expense;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\Types\Null_;
 use Symfony\Component\HttpFoundation\Response;
 
 class ExpenseController extends Controller
@@ -14,9 +15,23 @@ class ExpenseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $expenses = Expense::all();
+
+        $search = $request->input('search');
+
+        $expenses = Expense::query()
+                ->where('employee_name', 'LIKE', '%' . $search . '%')
+                ->orWhere('department', 'LIKE', '%' . $search . '%')
+                ->orWhere('department', 'LIKE', '%' . $search . '%')
+                ->orWhere('project_no', 'LIKE', '%' . $search . '%')
+                ->orWhere('description', 'LIKE', '%' . $search . '%')
+                ->orWhere('amount', 'LIKE', '%' . $search . '%')
+                ->orWhere('currency', 'LIKE', '%' . $search . '%')
+                ->orWhere('expense_type', 'LIKE', '%' . $search . '%')
+                ->orWhere('transaction_type', 'LIKE', '%' . $search . '%')
+                ->get();
+
 
         if ($expenses->count() == 0) {
             return response()->json([
@@ -32,6 +47,9 @@ class ExpenseController extends Controller
                 'data' => $expenses
             ]);
         }
+
+        //search functionality
+
     }
 
     /**
@@ -67,9 +85,8 @@ class ExpenseController extends Controller
 
 
         //image upload
-        $file_name = time() . '_' . $request->receipt_photo->getClientOriginalName();
-        $file_path = $request->file('receipt_photo')->storeAs('images', $file_name, 'public');
-
+        $file_name = time().'_'.$request->receipt_photo->getClientOriginalName();
+        $file_path = $request->file('receipt_photo')->storePubliclyAs('images', $file_name, 'public');
 
         $expense = Expense::create([
             'employee_name' => $request->employee_name,
@@ -80,8 +97,8 @@ class ExpenseController extends Controller
             'currency' => $request->currency,
             'expense_type' => $request->expense_type,
             'transaction_type' => $request->transaction_type,
-            'receipt_photo_name' => time() . '_' . $request->receipt_photo->getClientOriginalName(),
-            'receipt_photo_path' => $file_path,
+            'receipt_photo_name' => time().'_' .$request->receipt_photo->getClientOriginalName(),
+            'receipt_photo_path' => 'storage/' . $file_path,
             'date_issued' => $request->date_issued
         ]);
 

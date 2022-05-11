@@ -11,7 +11,6 @@
 
 const ESLintPlugin = require('eslint-webpack-plugin')
 
-
 const { configure } = require('quasar/wrappers');
 
 module.exports = configure(function (ctx) {
@@ -103,9 +102,17 @@ module.exports = configure(function (ctx) {
       //
       // components: [],
       // directives: [],
+      capacitor: {
+        // Quasar handles app exit on mobile phone back button.
+        backButtonExit: true/false/'*'/['/login', '/home', '/create-expense', '/edit-expense'],
+
+        // On the other hand, the following completely
+        // disables Quasar's back button management.
+        backButton: true/false
+      },
 
       // Quasar plugins
-      plugins: ['Notify']
+      plugins: ['Notify', 'Dialog']
     },
 
     // animations: 'all', // --- includes all animations

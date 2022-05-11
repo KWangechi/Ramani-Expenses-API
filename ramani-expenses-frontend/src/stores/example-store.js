@@ -5,6 +5,7 @@ export const useExpenseStore = defineStore("expense", {
   state: () => ({
     expense: {},
     expenses: [],
+    filters:[]
   }),
 
   getters: {
@@ -18,7 +19,7 @@ GET_ONE_EXPENSE(state, id){
   .get(`/expenses/${id}`)
   .then((response) => {
     this.expense = response.data.data;
-   
+
   })
   .catch((errors) => {
     console.log(errors);
@@ -29,7 +30,9 @@ GET_ONE_EXPENSE(state, id){
   actions: {
     getAllExpenses() {
       api
-        .get("/expenses")
+        .get("/expenses", {params: {
+          search: this.filters
+        }})
         .then(({ data: { data } }) => {
           this.expenses = data;
 

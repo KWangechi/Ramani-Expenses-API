@@ -2,7 +2,7 @@
   <q-layout>
     <div class="q-pa-md q-mt-xl q-gutter-md">
       <div v-if="expense">
-        <q-card flat bordered class="my-card">
+        <q-card flat bordered class="my-card" v-model="visible">
           <q-card-section>
             <div class="text-h6">Expense {{ expense }}</div>
           </q-card-section>
@@ -61,7 +61,6 @@ export default {
     }
   },
   mounted() {
-    this.getOneExpense();
     this.getAllExpenses;
 
   },
