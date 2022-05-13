@@ -111,7 +111,7 @@ export default defineComponent({
 
           else {
             this.$q.notify({
-              message: response.data.message,
+              message: 'Something went wrong',
               textColor: 'white-10',
               type:'negative'
             })

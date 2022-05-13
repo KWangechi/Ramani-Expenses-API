@@ -1,6 +1,9 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-table title="My Expenses" :columns="columns" row-key="name" :rows="expenses" separator="cell"
+<br>
+    <div class="text-h5" v-for="expense in expenses" :key="expense.id">
+      Total Balance: {{expense.currency}} {{expense.total_balance}}
+    </div>
+    <q-table class="my-sticky-header-table" title="My Expenses" :columns="columns" row-key="name" :rows="expenses" separator="cell"
       :pagination="pagination">
 
       <!-- search functionality -->
@@ -126,12 +129,10 @@
       </div>
         </q-card>
         </q-dialog>
-    <div class="q-pa-lg">
-      <q-tabs align="right">
-        <q-route-tab class="bg-primary text-white border-round" exact icon="add" to="/create-expense" />
-      </q-tabs>
-    </div>
-  </q-layout>
+
+     <q-page-sticky position="bottom-right" :offset="[18, 18]">
+            <q-btn fab icon="add" color="blue" to="/create-expense"/>
+          </q-page-sticky>
 </template>
 
 <script>
@@ -161,8 +162,9 @@ export default defineComponent({
         { name: 'description', align: 'center', label: 'Description', field: 'description' },
         { name: 'amount', align: 'center', label: 'Amount', field: 'amount' },
         { name: 'currency', align: 'center', label: 'Currency', field: 'currency', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-        { name: 'expense_type', align: 'center', label: 'Expense Type', field: 'expense_type', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-        { name: 'transaction_type', align: 'center', label: 'Transaction Type', field: 'transaction_type', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
+        // { name: 'expense_type', align: 'center', label: 'Expense Type', field: 'expense_type', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
+        // { name: 'transaction_type', align: 'center', label: 'Transaction Type', field: 'transaction_type', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
+
         { name: 'actions', align: 'center', label: 'Actions', field: 'actions' },
 
       ],
@@ -217,6 +219,8 @@ export default defineComponent({
         .get("/expenses", {
           params: {
             search: this.search
+          }, headers:{
+            "Access-Control-Allow-Origin": "*"
           }
         })
         .then(({ data: { data } }) => {
@@ -312,12 +316,23 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-.q-tabs-style {
-  border-radius: 100px;
-}
+<style lang="sass">
 
-// .my-card{
-//   z-index: -1;
-// }
 </style>
+.my-sticky-header-table
+  /* height or max-height is important */
+  height: 310px
+
+  .q-table__top,
+  .q-table__bottom,
+
+  thead tr th
+    position: sticky
+    z-index: 1
+  thead tr:first-child th
+    top: 0
+
+  /* this is when the loading indicator appears */
+  &.q-table--loading thead tr:last-child th
+    /* height of all previous header rows */
+    top: 48px

@@ -29,12 +29,12 @@
         :breakpoint="0"
       >
         <q-route-tab name="expenses" icon="money" label="Expenses" to="/expenses" />
-        <q-route-tab
+        <!-- <q-route-tab
           name="calendar"
           icon="eva-calendar"
           label="Calendar"
           to="/calendar"
-        />
+        /> -->
       </q-tabs>
       </q-footer>
 

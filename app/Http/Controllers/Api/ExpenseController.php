@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Api\Expense;
 use Illuminate\Http\Request;
-use phpDocumentor\Reflection\Types\Null_;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class ExpenseController extends Controller
 {
+
+    private $total_balance;
     /**
      * Display a listing of the resource.
      *
@@ -70,6 +72,9 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
+
+        // header("Access-Control-Allow-Origin: *");
+
         $request->validate([
             'employee_name' => 'required',
             'department' => 'required',
@@ -83,8 +88,22 @@ class ExpenseController extends Controller
             'date_issued' => 'required|date'
         ]);
 
+        //get the balance
+        $this->total_balance = DB::select('select total_balance from expenses');
 
-        //image upload
+        // dd('Index Method!!');
+
+        // if($request->amount === 'Money In'){
+        //     $this->total_balance[] -= $request->amount;
+        //     return $this->total_balance;
+        // }
+
+        // else{
+        //     $this->total_balance[] += $request->amount;
+        //     return $this->total_balance;
+        // }
+
+        // image upload
         $file_name = time().'_'.$request->receipt_photo->getClientOriginalName();
         $file_path = $request->file('receipt_photo')->storePubliclyAs('images', $file_name, 'public');
 
@@ -97,6 +116,7 @@ class ExpenseController extends Controller
             'currency' => $request->currency,
             'expense_type' => $request->expense_type,
             'transaction_type' => $request->transaction_type,
+            'total_balance' => $this->total_balance,
             'receipt_photo_name' => time().'_' .$request->receipt_photo->getClientOriginalName(),
             'receipt_photo_path' => 'storage/' . $file_path,
             'date_issued' => $request->date_issued
@@ -192,7 +212,6 @@ class ExpenseController extends Controller
             }
         }
 
-        // dd($expense);
     }
 
     /**
