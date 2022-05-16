@@ -5,7 +5,20 @@ export const useExpenseStore = defineStore("expense", {
   state: () => ({
     expense: {},
     expenses: [],
-    filters:[]
+    filters:[],
+    currency: ["KES", "USD", "UGX", "TZS", "GBP", "EUR"],
+      expense_types: [
+        "Per Diem",
+        "Accommodation",
+        "Materials",
+        "Casual Labour",
+        "Security",
+        "Military Costs",
+        "Fuel Logistics",
+        "Onsite Travel",
+      ],
+      transaction_types: ["Money In", "Money Out"],
+      project_numbers: [39999, 32856],
   }),
 
   getters: {

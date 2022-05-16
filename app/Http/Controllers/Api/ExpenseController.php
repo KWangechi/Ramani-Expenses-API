@@ -89,7 +89,7 @@ class ExpenseController extends Controller
         ]);
 
         //get the balance
-        $this->total_balance = DB::select('select total_balance from expenses');
+        // $this->total_balance = DB::select('select total_balance from expenses');
 
         // dd('Index Method!!');
 

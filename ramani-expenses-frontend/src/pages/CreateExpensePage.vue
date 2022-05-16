@@ -37,7 +37,8 @@
 
 import { defineComponent } from "vue";
 import { api } from "src/boot/axios";
-
+import { mapState } from "pinia";
+import { useExpenseStore } from "src/stores/example-store";
 
 export default defineComponent({
   name: "CreateExpensePage",
@@ -55,25 +56,15 @@ export default defineComponent({
         receipt_photo: "",
         date_issued: "",
       },
-      currency: ["KES", "USD", "UGX", "TZS", "GBP", "EUR"],
-      expense_types: [
-        "Per Diem",
-        "Accommodation",
-        "Materials",
-        "Casual Labour",
-        "Security",
-        "Military Costs",
-        "Fuel Logistics",
-        "Onsite Travel",
-      ],
-      transaction_types: ["Money In", "Money Out"],
-      project_numbers: [39999, 32856],
     };
   },
   computed: {
-    // ...mapActions(useExpenseStore, {
-    //   createExpense: "createExpense",
-    // }),
+    ...mapState(useExpenseStore, {
+      currency: "currency",
+      expense_types: "expense_types",
+      transaction_types: "transaction_types",
+      project_numbers: "project_numbers"
+    }),
   },
 
   methods: {
@@ -100,6 +91,7 @@ export default defineComponent({
         .then((response) => {
 
           if (response.data.success) {
+            const $q = useQuasar()
             this.$q.notify({
               message: response.data.message,
               textColor: 'white-10',

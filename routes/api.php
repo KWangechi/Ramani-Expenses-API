@@ -14,12 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+Route::post('/register', [App\Http\Controllers\Api\UserController::class, 'register']);
+Route::post('/login', [App\Http\Controllers\Api\UserController::class, 'login']);
 
 //expenses endpoints
-Route::prefix('expenses')->group(function () {
+Route::middleware(['auth:sanctum'])->prefix('expenses')->group(function () {
     Route::get('/',  [App\Http\Controllers\Api\ExpenseController::class, 'index']);
     Route::post('/create',  [App\Http\Controllers\Api\ExpenseController::class, 'store']);
     Route::get('/{id}', [App\Http\Controllers\Api\ExpenseController::class, 'show']);

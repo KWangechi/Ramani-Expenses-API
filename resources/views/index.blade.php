@@ -13,6 +13,10 @@
     <link rel=icon type=image/png sizes=96x96 href=icons/favicon-96x96.png>
     <link rel=icon type=image/png sizes=32x32 href=icons/favicon-32x32.png>
     <link rel=icon type=image/png sizes=16x16 href=icons/favicon-16x16.png>
+    <!-- import CSS -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <link rel=icon type=image/ico href=favicon.ico>
     <script defer src=/js/vendor.be1f70b0.js></script>
     <script defer src=/js/app.11bde6a2.js></script>

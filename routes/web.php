@@ -17,6 +17,6 @@ use Illuminate\Support\Facades\Route;
 //     return view('index');
 // });
 
-// Route::get('{any}', function () {
-//     return view('index');
-// })->where('any','.*');
+Route::get('{any}', function () {
+    return view('index');
+})->where('any','.*');
