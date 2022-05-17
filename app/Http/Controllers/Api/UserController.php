@@ -23,13 +23,13 @@ class UserController extends Controller
 
         if (!$user) {
             return response()->json([
-                'status' => false,
+                'success' => false,
                 'message' => 'Something went wrong... Please try again!!',
                 'status_code' => Response::HTTP_REQUEST_TIMEOUT,
             ]);
         } else {
             return response()->json([
-                'status' => true,
+                'success' => true,
                 'message' => 'Registration Successfull!!',
                 'status_code' => Response::HTTP_OK,
                 'data' => $user,
@@ -65,7 +65,7 @@ class UserController extends Controller
         if ($request->user()->tokens()->delete()) {
             return response()->json([
                 'success' => true,
-                'message' => "Sign out successful!!",
+                'message' => "Log out successful!!",
                 'status_code' => Response::HTTP_OK
             ]);
         } else {

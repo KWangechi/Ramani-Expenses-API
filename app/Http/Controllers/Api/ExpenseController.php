@@ -32,6 +32,7 @@ class ExpenseController extends Controller
                 ->orWhere('currency', 'LIKE', '%' . $search . '%')
                 ->orWhere('expense_type', 'LIKE', '%' . $search . '%')
                 ->orWhere('transaction_type', 'LIKE', '%' . $search . '%')
+                ->where('user_id', auth()->user()->id)
                 ->get();
 
 
@@ -74,7 +75,6 @@ class ExpenseController extends Controller
     {
 
         // header("Access-Control-Allow-Origin: *");
-
         $request->validate([
             'employee_name' => 'required',
             'department' => 'required',
@@ -108,6 +108,7 @@ class ExpenseController extends Controller
         $file_path = $request->file('receipt_photo')->storePubliclyAs('images', $file_name, 'public');
 
         $expense = Expense::create([
+            'user_id' => auth()->user()->id,
             'employee_name' => $request->employee_name,
             'department' => $request->department,
             'project_no' => $request->project_no,
@@ -148,7 +149,7 @@ class ExpenseController extends Controller
      */
     public function show($id)
     {
-        $expense = Expense::find($id);
+        $expense = Expense::where('user_id', auth()->user()->id)->find($id);
 
         if (!$expense) {
             return response()->json([
@@ -186,7 +187,7 @@ class ExpenseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $expense  = Expense::find($id);
+        $expense  = Expense::where('user_id', auth()->user()->id)->find($id);
 
         if (!$expense) {
             return response()->json([
@@ -222,7 +223,7 @@ class ExpenseController extends Controller
      */
     public function destroy($id)
     {
-        $expense = Expense::find($id);
+        $expense = Expense::where('user_id', auth()->user()->id)->find($id);
 
         if (!$expense) {
             return response()->json([

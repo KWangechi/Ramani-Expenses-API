@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->string('employee_name');
             $table->string('department');
             $table->double('project_no');
@@ -32,7 +33,7 @@ return new class extends Migration
             $table->timestamps();
 
             //relationship with users table
-            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

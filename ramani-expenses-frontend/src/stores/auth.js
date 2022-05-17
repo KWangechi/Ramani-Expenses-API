@@ -1,14 +1,13 @@
 import { defineStore } from "pinia";
 import axios, { api } from "src/boot/axios";
-import { Notify, useQuasar } from 'quasar'
-import {ElMessage} from 'element-plus'
-
+import { Notify, useQuasar } from "quasar";
+// import { ElMessage } from 'element-plus'
 
 export const useAuthStore = defineStore("main", {
   state: () => ({
     authToken: "",
     user: {},
-    errorMessage: ''
+    errorMessage: "",
   }),
 
   mutations: {},
@@ -18,29 +17,35 @@ export const useAuthStore = defineStore("main", {
       api
         .post("/register", user)
         .then((response) => {
-          // console.log(response)
-
           if (response.data.success) {
             localStorage.setItem("authToken", response.data.access_token);
 
-          //   ElMessage({
-          //     type: 'success',
-          //     message: 'Registration successful'
-          // })
+            Notify.create({
+              message: "Registration successful!!",
+              textColor: "white-5",
+              type: "positive",
+              actions: [
+                {
+                  label: "Dismiss",
+                  color: "white",
+                  handler: () => {
+                    /* ... */
+                  },
+                },
+              ],
+            });
 
-          // window.location.href = "/login"
+            window.location.href = "/login";
 
             this.user = response.data.data;
 
-            axios.defaults.headers.common["Authorization"] =
-              "Bearer " + response.data.access_token;
-
+            // axios.defaults.headers.common["Authorization"] =
+            //   "Bearer " + response.data.access_token;
           } else {
             this.errorMessage = response.data.message;
             localStorage.clear();
           }
-
-          console.log(response)
+          console.log(response);
         })
         .catch((errors) => {
           console.log(errors);
@@ -52,35 +57,90 @@ export const useAuthStore = defineStore("main", {
         .then((response) => {
           console.log(response);
 
-          ElMessage({
-            type: 'success',
-            message: 'Successfully logged in!'
-        })
+          if (response.data.success) {
+            localStorage.setItem("authToken", response.data.access_token);
 
+            Notify.create({
+              message: response.data.message,
+              textColor: "white-5",
+              type: "positive",
+              actions: [
+                {
+                  label: "Dismiss",
+                  color: "white",
+                  handler: () => {
+                    /* ... */
+                  },
+                },
+              ],
+            });
+
+            window.location.href = "/expenses";
+          } else {
+            Notify.create({
+              message: response.data.message,
+              textColor: "white-5",
+              type: "negative",
+              actions: [
+                {
+                  label: "Dismiss",
+                  color: "white",
+                  handler: () => {
+                    /* ... */
+                  },
+                },
+              ],
+            });
+          }
         })
         .catch((errors) => {
           console.log(errors);
         });
     },
     logout() {
-      axios.defaults.headers.common["Authorization"] =
-              "Bearer " + localStorage.getItem('authToken');
-
       api
-        .post("/logout", user)
+        .post("/logout")
         .then((response) => {
           localStorage.removeItem("authoken");
-
           if (response.data.success) {
-            window.location.href = "/login";
-            ElMessage({
-                message: "Successfully logged out",
-                type: "success",
-            });
-        } else {
-            console.log(response);
-        }
 
+            Notify.create({
+              message: response.data.message,
+              textColor: "white-5",
+              type: "positive",
+              actions: [
+                {
+                  label: "Dismiss",
+                  color: "white",
+                  handler: () => {
+                    /* ... */
+                  },
+                },
+              ],
+            });
+
+            window.location.href = "/login";
+          } else {
+            console.log(response);
+          }
+        })
+        .catch((errors) => {
+          console.log(errors);
+        });
+    },
+
+    getUser() {
+      api
+        .get("/user", {
+          headers: {
+            "Authorization": "Bearer " + localStorage.getItem("authToken"),
+          },
+        })
+        .then((response) => {
+          // console.log(response.data)
+
+          this.user = response.data;
+          // console.log(this.user);
         })
         .catch((errors) => {
           console.log(errors);

@@ -236,6 +236,7 @@ import { useExpenseStore } from "src/stores/example-store";
 import { mapActions, mapState } from "pinia";
 import Swal from "sweetalert2";
 import { api } from "src/boot/axios";
+import { useAuthStore } from "src/stores/auth";
 
 export default defineComponent({
   name: "ExpensesPage",
@@ -328,12 +329,17 @@ export default defineComponent({
     }),
   },
   mounted() {
+    // this.getUser();
     this.getAllExpenses();
   },
   methods: {
     async viewExpense(props) {
       await api
-        .get(`/expenses/${props.id}`)
+        .get(`/expenses/${props.id}`, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        })
         .then((response) => {
           this.expense = response.data.data;
 
@@ -354,6 +360,7 @@ export default defineComponent({
           },
           headers: {
             "Access-Control-Allow-Origin": "*",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
           },
         })
         .then(({ data: { data } }) => {
@@ -363,10 +370,13 @@ export default defineComponent({
           console.log(errors);
         });
     },
-
     editExpense(props) {
       api
-        .get(`/expenses/${props.row.id}`)
+        .get(`/expenses/${props.row.id}`, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },})
         .then((response) => {
           this.expense = response.data.data;
         })
@@ -387,7 +397,12 @@ export default defineComponent({
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.isConfirmed) {
-          api.delete("/expenses/" + props.row.id).then((response) => {
+          api.delete("/expenses/" + props.row.id, {
+            headers: {
+            "Access-Control-Allow-Origin": "*",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+          }).then((response) => {
             console.log(response);
 
             window.location = "/expenses";
@@ -457,6 +472,12 @@ export default defineComponent({
         );
       }
     },
+
+    getUser(){
+      const store = useAuthStore()
+      store.getUser();
+
+    }
   },
 });
 </script>

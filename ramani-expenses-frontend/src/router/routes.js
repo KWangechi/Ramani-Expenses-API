@@ -14,13 +14,25 @@ const routes = [
     component: MainLayout,
     children: [
       { path: '', component: IndexPage },
-      { path: '/login', component: LoginPage },
-      { path: '/register', component: RegisterPage },
-      { path: '/expenses', component: ExpensesPage},
-      { path: '/calendar', component: CalendarPage},
-      { path: '/create-expense', component: CreateExpensePage},
-      { path: '/expenses/:id', component: OneExpense},
-      
+      { path: '/login', component: LoginPage, meta:{
+        middleware:"auth"
+    }, },
+      { path: '/register', component: RegisterPage, meta:{
+        middleware:"auth"
+    }, },
+      { path: '/expenses', component: ExpensesPage, meta:{
+        middleware:"auth"
+    },},
+      { path: '/calendar', component: CalendarPage, meta:{
+        middleware:"auth"
+    },},
+      { path: '/create-expense', component: CreateExpensePage, meta:{
+        middleware:"auth"
+    },},
+      { path: '/expenses/:id', component: OneExpense, meta:{
+        middleware:"auth"
+    },},
+
     ]
   },
 

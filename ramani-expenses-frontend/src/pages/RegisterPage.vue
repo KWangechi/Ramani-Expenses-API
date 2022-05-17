@@ -21,12 +21,12 @@
         type="submit"
         label="Register"
       ></q-btn>
-      <p>Already Logged in</p>
-      <a href="/login" class="bg-secondary text-center" style="cursor: pointer"
-        >Login Here</a
-      >
+      <a href="/login" align="right" class="text-center" style="cursor: pointer; float: right;"
+        >Login Here</a>
+      <p style="float: right">Already Have an Account?</p>
     </q-form>
   </div>
+
 </template>
 
 <script>
@@ -46,15 +46,11 @@ export default {
       const authStore = useAuthStore();
       authStore.register(this.user);
 
-      // this.$q.notify({
-      //   message: 'Registration Successful',
-      //   textColor: "white-10",
-      //   type: "positive",
-      // });
-
-      
     },
   },
   computed: {},
 };
 </script>
+
+<style lang="scss">
+</style>

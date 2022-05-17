@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-lg" style="max-width: 600px; margin: auto">
-    <q-form @submit="registerUser" class="q-gutter-md" id="register-form">
+    <q-form @submit="loginUser" class="q-gutter-md" id="register-form">
       <q-input
         outlined
         v-model="user.email"
@@ -21,10 +21,9 @@
         type="submit"
         label="Login"
       ></q-btn>
-      <p>Don't have an account?</p>
-      <a href="/register" class="bg-secondary text-center" style="cursor: pointer"
-        >Login Here</a
-      >
+      <a href="/register" align="right" class="text-center" style="cursor: pointer; float: right;"
+        >Register an account</a>
+      <p style="float: right">Don't have an account</p>
     </q-form>
   </div>
 </template>
@@ -46,13 +45,6 @@ export default {
       const authStore = useAuthStore();
       authStore.login(this.user);
 
-      this.$q.notify({
-        message: 'Registration Successful',
-        textColor: "white-10",
-        type: "positive",
-      });
-
-      window.location = "/login"
     },
   },
   computed: {},

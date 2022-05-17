@@ -16,9 +16,21 @@ export const useExpenseStore = defineStore("expense", {
         "Military Costs",
         "Fuel Logistics",
         "Onsite Travel",
+        'Equipment Hire',
+        'Other Field Project Costs',
+        'Car Hire',
+        'Vehicle Fuel',
+        'Vehicle Repairs',
+        'Vehicle Services and Fees',
+        'AVGAS',
+        'Aviation Maintenance',
+        'Aviation Fees',
+        'Aircraft Hire',
+        'BD Entertainment',
+        'Entertainment'
       ],
       transaction_types: ["Money In", "Money Out"],
-      project_numbers: [39999, 32856],
+      project_numbers: [39999, 32856, 34572, 33992, 32576, 34471, 34669, 34614],
   }),
 
   getters: {

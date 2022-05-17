@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/register', [App\Http\Controllers\Api\UserController::class, 'register']);
 Route::post('/login', [App\Http\Controllers\Api\UserController::class, 'login']);
+Route::post('/logout', [App\Http\Controllers\Api\UserController::class, 'logout'])->middleware('auth:sanctum');
 
 //expenses endpoints
 Route::middleware(['auth:sanctum'])->prefix('expenses')->group(function () {
@@ -28,6 +29,8 @@ Route::middleware(['auth:sanctum'])->prefix('expenses')->group(function () {
     Route::get('/{id}', [App\Http\Controllers\Api\ExpenseController::class, 'show']);
     Route::patch('/{id}',  [App\Http\Controllers\Api\ExpenseController::class, 'update']);
     Route::delete('/{id}',  [App\Http\Controllers\Api\ExpenseController::class, 'destroy']);
+
+
 });
 
 // Route::get('/create_method', [App\Http\Controllers\Api\ExpenseController::class, 'create']);
