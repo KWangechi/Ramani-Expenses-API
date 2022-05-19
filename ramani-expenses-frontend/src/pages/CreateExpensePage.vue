@@ -4,10 +4,13 @@
       <q-form @submit="createNewExpense" class="q-gutter-md">
         <q-input
           outlined
-          v-model="newExpense.employee_name"
+          v-model="store.user.name"
           label="Employee Name"
           id="employee_name"
           name="employee_name"
+          :rules="[val => !!val || 'Field is required']"
+          lazy-rules
+          disable
         />
         <q-input
           outlined
@@ -15,6 +18,8 @@
           label="Department"
           id="department"
           name="department"
+          lazy-rules
+          :rules="[val => !!val || 'Field is required']"
         />
         <q-input
           outlined
@@ -22,6 +27,8 @@
           label="Description"
           id="description"
           name="description"
+          :rules="[val => !!val || 'Field is required']"
+
         />
         <q-input
           outlined
@@ -30,6 +37,8 @@
           label="Amount"
           id="amount"
           name="amount"
+          :rules="[val => !!val || 'Field is required']"
+
         />
         <q-select
           outlined
@@ -38,6 +47,8 @@
           label="Project Number"
           id="project_no"
           name="project_no"
+          :rules="[val => !!val || 'Field is required']"
+
         />
         <q-select
           outlined
@@ -54,6 +65,7 @@
           label="Expense Type"
           id="expense_type"
           name="expense_type"
+
         />
         <q-select
           outlined
@@ -72,6 +84,8 @@
           @change="onFileChange()"
           label="Photo Receipt"
           accept=".jpg, .png, .jpeg"
+          :rules="[val => !!val || 'Field is required']"
+
         >
           <template v-slot:prepend>
             <q-icon name="cloud_upload" />
@@ -86,6 +100,8 @@
           v-model="newExpense.date_issued"
           id="date_issued"
           name="date_issued"
+          :rules="[val => !!val || 'Field is required']"
+
         />
         <q-btn
           class="bg-primary text-center"
@@ -109,13 +125,13 @@ import { api } from "src/boot/axios";
 import { mapState } from "pinia";
 import { useExpenseStore } from "src/stores/example-store";
 import { useQuasar } from "quasar";
+import { useAuthStore } from "src/stores/auth";
 
 export default defineComponent({
   name: "CreateExpensePage",
   data() {
     return {
       newExpense: {
-        employee_name: "",
         department: "",
         description: "",
         amount: "",
@@ -126,6 +142,7 @@ export default defineComponent({
         receipt_photo: "",
         date_issued: "",
       },
+      store: useAuthStore()
     };
   },
   computed: {

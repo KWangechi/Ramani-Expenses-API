@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('currency');
             $table->string('expense_type');
             $table->string('transaction_type');
-            $table->integer('total_balance')->default(20000)->nullable();
+            $table->integer('total_balance')->default(0)->nullable();
             $table->text('receipt_photo_name')->default("")->nullable();
             $table->text('receipt_photo_path')->default("")->nullable();
             $table->date('date_issued');

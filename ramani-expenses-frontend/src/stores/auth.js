@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
-import axios, { api } from "src/boot/axios";
-import { Notify, useQuasar } from "quasar";
-// import { ElMessage } from 'element-plus'
+import { api } from "src/boot/axios";
+import { Notify } from "quasar";
 
 export const useAuthStore = defineStore("main", {
   state: () => ({
@@ -102,45 +101,49 @@ export const useAuthStore = defineStore("main", {
         .post("/logout")
         .then((response) => {
           localStorage.removeItem("authoken");
-          if (response.data.success) {
+          console.log(localStorage.getItem("authToken"))
 
-            Notify.create({
-              message: response.data.message,
-              textColor: "white-5",
-              type: "positive",
-              actions: [
-                {
-                  label: "Dismiss",
-                  color: "white",
-                  handler: () => {
-                    /* ... */
-                  },
-                },
-              ],
-            });
+        //   if (response.data.success) {
+        //     Notify.create({
+        //       message: response.data.message,
+        //       textColor: "white-5",
+        //       type: "positive",
+        //       actions: [
+        //         {
+        //           label: "Dismiss",
+        //           color: "white",
+        //           handler: () => {
+        //             /* ... */
+        //           },
+        //         },
+        //       ],
+        //     });
 
-            window.location.href = "/login";
-          } else {
-            console.log(response);
-          }
-        })
-        .catch((errors) => {
-          console.log(errors);
+        //     window.location.href = "/login";
+        //   } else {
+        //     console.log(response);
+        //   }
+        // })
+        // .catch((errors) => {
+        //   console.log(errors);
+        // });
         });
+
     },
 
-    getUser() {
-      api
+    async getUser() {
+      await api
         .get("/user", {
           headers: {
             "Authorization": "Bearer " + localStorage.getItem("authToken"),
           },
         })
         .then((response) => {
-          // console.log(response.data)
+          localStorage.getItem("authToken")
+          console.log(localStorage.getItem("authToken"))
 
           this.user = response.data;
-          // console.log(this.user);
+          console.log(this.user);
         })
         .catch((errors) => {
           console.log(errors);

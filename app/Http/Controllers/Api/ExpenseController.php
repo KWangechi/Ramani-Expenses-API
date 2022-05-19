@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ExpenseController extends Controller
 {
 
-    private $total_balance;
+    private $total_balance = 0;
     /**
      * Display a listing of the resource.
      *
@@ -21,19 +21,18 @@ class ExpenseController extends Controller
     {
 
         $search = $request->input('search');
-
         $expenses = Expense::query()
-                ->where('employee_name', 'LIKE', '%' . $search . '%')
-                ->orWhere('department', 'LIKE', '%' . $search . '%')
-                ->orWhere('department', 'LIKE', '%' . $search . '%')
-                ->orWhere('project_no', 'LIKE', '%' . $search . '%')
-                ->orWhere('description', 'LIKE', '%' . $search . '%')
-                ->orWhere('amount', 'LIKE', '%' . $search . '%')
-                ->orWhere('currency', 'LIKE', '%' . $search . '%')
-                ->orWhere('expense_type', 'LIKE', '%' . $search . '%')
-                ->orWhere('transaction_type', 'LIKE', '%' . $search . '%')
-                ->where('user_id', auth()->user()->id)
-                ->get();
+            ->where('employee_name', 'LIKE', '%' . $search . '%')
+            ->orWhere('department', 'LIKE', '%' . $search . '%')
+            ->orWhere('department', 'LIKE', '%' . $search . '%')
+            ->orWhere('project_no', 'LIKE', '%' . $search . '%')
+            ->orWhere('description', 'LIKE', '%' . $search . '%')
+            ->orWhere('amount', 'LIKE', '%' . $search . '%')
+            ->orWhere('currency', 'LIKE', '%' . $search . '%')
+            ->orWhere('expense_type', 'LIKE', '%' . $search . '%')
+            ->orWhere('transaction_type', 'LIKE', '%' . $search . '%')
+            ->where('user_id', auth()->user()->id)
+            ->get();
 
 
         if ($expenses->count() == 0) {
@@ -50,19 +49,6 @@ class ExpenseController extends Controller
                 'data' => $expenses
             ]);
         }
-
-        //search functionality
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        dd('Create method!');
     }
 
     /**
@@ -89,27 +75,22 @@ class ExpenseController extends Controller
         ]);
 
         //get the balance
-        // $this->total_balance = DB::select('select total_balance from expenses');
+        $previous_balance = DB::table('expenses')->latest()->first()->total_balance;
 
-        // dd('Index Method!!');
+        if ($request->transaction_type == "Money In") {
+            $this->total_balance = $previous_balance + $request->amount;
+        } else {
+            $this->total_balance = $previous_balance - $request->amount;
+        }
 
-        // if($request->amount === 'Money In'){
-        //     $this->total_balance[] -= $request->amount;
-        //     return $this->total_balance;
-        // }
-
-        // else{
-        //     $this->total_balance[] += $request->amount;
-        //     return $this->total_balance;
-        // }
 
         // image upload
-        $file_name = time().'_'.$request->receipt_photo->getClientOriginalName();
+        $file_name = time() . '_' . $request->receipt_photo->getClientOriginalName();
         $file_path = $request->file('receipt_photo')->storePubliclyAs('images', $file_name, 'public');
 
         $expense = Expense::create([
             'user_id' => auth()->user()->id,
-            'employee_name' => $request->employee_name,
+            'employee_name' => auth()->user()->name,
             'department' => $request->department,
             'project_no' => $request->project_no,
             'description' => $request->description,
@@ -118,12 +99,12 @@ class ExpenseController extends Controller
             'expense_type' => $request->expense_type,
             'transaction_type' => $request->transaction_type,
             'total_balance' => $this->total_balance,
-            'receipt_photo_name' => time().'_' .$request->receipt_photo->getClientOriginalName(),
+            'receipt_photo_name' => time() . '_' . $request->receipt_photo->getClientOriginalName(),
             'receipt_photo_path' => 'storage/' . $file_path,
             'date_issued' => $request->date_issued
         ]);
 
-        // dd($expense);
+        // dd(["Previous balance: ", $previous_balance, 'Requested Amount: ', $request->amount, "Total Balance: ", $this->total_balance]);
 
         if (!$expense) {
             return response()->json([
@@ -167,16 +148,6 @@ class ExpenseController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -212,7 +183,6 @@ class ExpenseController extends Controller
                 ]);
             }
         }
-
     }
 
     /**
@@ -248,5 +218,22 @@ class ExpenseController extends Controller
         }
 
         // dd($expense);
+    }
+
+    public function getLatestBalance()
+    {
+        $total_balance = DB::table('expenses')->latest()->first()->total_balance;
+        $currency = DB::table('expenses')->latest()->first()->currency;
+        
+        return response()->json([
+            'success' => true,
+            'data' => $total_balance
+        ]);
+
+        // dd($total_balance);
+    }
+
+    public function create(){
+        dd('This is my create method!!');
     }
 }

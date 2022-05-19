@@ -1,6 +1,12 @@
 <template>
   <div class="q-pa-lg" style="max-width: 600px; margin: auto">
     <q-form @submit="registerUser" class="q-gutter-md" id="register-form">
+    <q-input
+        outlined
+        v-model="user.name"
+        label="Employee name"
+      />
+
       <q-input
         outlined
         v-model="user.email"
@@ -36,6 +42,7 @@ export default {
   data() {
     return {
       user: {
+        name:"",
         email: "",
         password: "",
       },

@@ -1,10 +1,10 @@
 <template>
   <br />
-  <div class="text-h5" v-for="expense in expenses" :key="expense.id">
-    Total Balance: {{ expense.currency }} {{ expense.total_balance }}
+  <div class="text-h5 q-ml-md">
+    Total Balance: {{ total_balance }}
   </div>
   <q-table
-    class="my-sticky-header-table"
+    class="my-sticky-header-table q-ma-md"
     title="My Expenses"
     :columns="columns"
     row-key="name"
@@ -279,6 +279,16 @@ export default defineComponent({
           field: "description",
         },
         { name: "amount", align: "center", label: "Amount", field: "amount" },
+        // { name: 'expense_type', align: 'center', label: 'Expense Type', field: 'expense_type', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
+        {
+          name: "transaction_type",
+          align: "center",
+          label: "Transaction Type",
+          field: "transaction_type",
+          sortable: true,
+          sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
+        },
+
         {
           name: "currency",
           align: "center",
@@ -287,8 +297,12 @@ export default defineComponent({
           sortable: true,
           sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
         },
-        // { name: 'expense_type', align: 'center', label: 'Expense Type', field: 'expense_type', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-        // { name: 'transaction_type', align: 'center', label: 'Transaction Type', field: 'transaction_type', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
+        // {
+        //   name: "total_balance",
+        //   align: "center",
+        //   label: "Total Balance",
+        //   field: "total_balance",
+        // },
 
         {
           name: "actions",
@@ -309,7 +323,7 @@ export default defineComponent({
       prompt: false,
       myPhoto: null,
       fileImageURL: "",
-
+      total_balance: null
     };
   },
 
@@ -325,18 +339,20 @@ export default defineComponent({
       currency: "currency",
       expense_types: "expense_types",
       transaction_types: "transaction_types",
-      project_numbers: "project_numbers"
+      project_numbers: "project_numbers",
     }),
   },
   mounted() {
     // this.getUser();
     this.getAllExpenses();
+    this.getLatestBalance();
   },
   methods: {
     async viewExpense(props) {
       await api
         .get(`/expenses/${props.id}`, {
           headers: {
+            "Access-Control-Allow-Origin": "*",
             Authorization: "Bearer " + localStorage.getItem("authToken"),
           },
         })
@@ -376,7 +392,8 @@ export default defineComponent({
           headers: {
             "Access-Control-Allow-Origin": "*",
             Authorization: "Bearer " + localStorage.getItem("authToken"),
-          },})
+          },
+        })
         .then((response) => {
           this.expense = response.data.data;
         })
@@ -384,7 +401,7 @@ export default defineComponent({
           console.log(errors);
         });
 
-        this.prompt = true;
+      this.prompt = true;
     },
     deleteExpense(props) {
       Swal.fire({
@@ -397,31 +414,33 @@ export default defineComponent({
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.isConfirmed) {
-          api.delete("/expenses/" + props.row.id, {
-            headers: {
-            "Access-Control-Allow-Origin": "*",
-            Authorization: "Bearer " + localStorage.getItem("authToken"),
-          },
-          }).then((response) => {
-            console.log(response);
-
-            window.location = "/expenses";
-            // this.getAllExpenses
-            if (response.data.message) {
-              this.$q.notify({
-                message: response.data.message,
-                type: "positive",
-              });
-
-              this.getAllExpenses;
+          api
+            .delete("/expenses/" + props.row.id, {
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                Authorization: "Bearer " + localStorage.getItem("authToken"),
+              },
+            })
+            .then((response) => {
               console.log(response);
-            } else {
-              this.$q.notify({
-                message: response.data.message,
-                type: "negative",
-              });
-            }
-          });
+
+              window.location = "/expenses";
+              // this.getAllExpenses
+              if (response.data.message) {
+                this.$q.notify({
+                  message: response.data.message,
+                  type: "positive",
+                });
+
+                this.getAllExpenses;
+                console.log(response);
+              } else {
+                this.$q.notify({
+                  message: response.data.message,
+                  type: "negative",
+                });
+              }
+            });
         }
       });
     },
@@ -451,7 +470,7 @@ export default defineComponent({
       //     console.log(errors);
       //   });
 
-      console.log(expense)
+      console.log(expense);
     },
     onFileChange() {
       const reader = new FileReader();
@@ -473,18 +492,47 @@ export default defineComponent({
       }
     },
 
-    getUser(){
-      const store = useAuthStore()
+    getUser() {
+      const store = useAuthStore();
       store.getUser();
+    },
 
-    }
+    getLatestBalance() {
+      api
+        .get("/balance", {
+        })
+        .then((response) => {
+          this.total_balance = response.data.data
+
+          // console.log(response.data.data);
+        })
+        .catch((errors) => {
+          console.log(errors);
+        });
+    },
   },
 });
 </script>
 
-<style lang="sass"></style>
-.my-sticky-header-table /* height or max-height is important */ height: 310px
-.q-table__top, .q-table__bottom, thead tr th position: sticky z-index: 1 thead
-tr:first-child th top: 0 /* this is when the loading indicator appears */
-&.q-table--loading thead tr:last-child th /* height of all previous header rows
-*/ top: 48px
+<style lang="sass">
+.my-sticky-header-table
+  /* height or max-height is important */
+  height: 310px
+
+  .q-table__top,
+  .q-table__bottom,
+  thead tr:first-child th
+    /* bg color is important for th; just specify one */
+    background-color: #c1f4cd
+
+  thead tr th
+    position: sticky
+    z-index: 1
+  thead tr:first-child th
+    top: 0
+
+  /* this is when the loading indicator appears */
+  &.q-table--loading thead tr:last-child th
+    /* height of all previous header rows */
+    top: 48px
+</style>

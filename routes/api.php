@@ -24,13 +24,14 @@ Route::post('/logout', [App\Http\Controllers\Api\UserController::class, 'logout'
 
 //expenses endpoints
 Route::middleware(['auth:sanctum'])->prefix('expenses')->group(function () {
+
     Route::get('/',  [App\Http\Controllers\Api\ExpenseController::class, 'index']);
     Route::post('/create',  [App\Http\Controllers\Api\ExpenseController::class, 'store']);
     Route::get('/{id}', [App\Http\Controllers\Api\ExpenseController::class, 'show']);
     Route::patch('/{id}',  [App\Http\Controllers\Api\ExpenseController::class, 'update']);
     Route::delete('/{id}',  [App\Http\Controllers\Api\ExpenseController::class, 'destroy']);
 
-
 });
 
-// Route::get('/create_method', [App\Http\Controllers\Api\ExpenseController::class, 'create']);
+Route::get('/create_method', [App\Http\Controllers\Api\ExpenseController::class, 'create']);
+Route::get('/balance', [App\Http\Controllers\Api\ExpenseController::class, 'getLatestBalance']);
