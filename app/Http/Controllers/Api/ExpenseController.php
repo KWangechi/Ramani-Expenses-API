@@ -75,12 +75,18 @@ class ExpenseController extends Controller
         ]);
 
         //get the balance
-        $previous_balance = DB::table('expenses')->latest()->first()->total_balance;
+        $previous_balance = DB::table('expenses')->latest()->first();
 
-        if ($request->transaction_type == "Money In") {
-            $this->total_balance = $previous_balance + $request->amount;
-        } else {
-            $this->total_balance = $previous_balance - $request->amount;
+        if($previous_balance == null){
+            $this->total_balance = $request->amount;
+        }
+        
+        else{
+            if ($request->transaction_type == "Money In") {
+                $this->total_balance = $previous_balance->total_balance + $request->amount;
+            } else {
+                $this->total_balance = $previous_balance->total_balance - $request->amount;
+            }
         }
 
 
@@ -104,7 +110,6 @@ class ExpenseController extends Controller
             'date_issued' => $request->date_issued
         ]);
 
-        // dd(["Previous balance: ", $previous_balance, 'Requested Amount: ', $request->amount, "Total Balance: ", $this->total_balance]);
 
         if (!$expense) {
             return response()->json([
@@ -120,6 +125,10 @@ class ExpenseController extends Controller
                 'data' => $expense
             ]);
         }
+
+        // dd($previous_balance);
+        // dd($this->total_balance);
+
     }
 
     /**
@@ -130,6 +139,8 @@ class ExpenseController extends Controller
      */
     public function show($id)
     {
+        // header("Access-Control-Allow-Origin: *");
+
         $expense = Expense::where('user_id', auth()->user()->id)->find($id);
 
         if (!$expense) {

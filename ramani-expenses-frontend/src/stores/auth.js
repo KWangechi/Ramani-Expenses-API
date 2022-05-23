@@ -4,13 +4,11 @@ import { Notify } from "quasar";
 
 export const useAuthStore = defineStore("main", {
   state: () => ({
-    authToken: "",
     user: {},
     errorMessage: "",
   }),
 
   mutations: {},
-
   actions: {
     register(user) {
       api
@@ -76,10 +74,52 @@ export const useAuthStore = defineStore("main", {
 
             window.location.href = "/expenses";
           } else {
+            this.errorMessage = response.data.message
+
+            // Notify.create({
+            //   message: response.data.message,
+            //   textColor: "white-5",
+            //   type: "negative",
+            //   actions: [
+            //     {
+            //       label: "Dismiss",
+            //       color: "white",
+            //       handler: () => {
+            //         /* ... */
+            //       },
+            //     },
+            //   ],
+            // });
+
+            // console.log(this.errorMessage)
+          }
+        })
+        .catch((errors) => {
+          console.log(errors);
+        });
+    },
+    async logout() { 
+      await api
+        .post("/logout", 
+        null,
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
+          },
+        }
+        )
+        .then((response) => {
+          localStorage.removeItem("authToken");
+          console.log(localStorage.getItem("authToken"))
+
+          console.log(response);
+
+          if (response.data.success) {
             Notify.create({
               message: response.data.message,
               textColor: "white-5",
-              type: "negative",
+              type: "positive",
               actions: [
                 {
                   label: "Dismiss",
@@ -90,57 +130,33 @@ export const useAuthStore = defineStore("main", {
                 },
               ],
             });
+
+            window.location.href = "/login";
+            // this.$router.push('/login');
+
+          } else {
+            console.log(response);
           }
+          window.location.href = "/login";
         })
         .catch((errors) => {
           console.log(errors);
         });
-    },
-    logout() {
-      api
-        .post("/logout")
-        .then((response) => {
-          localStorage.removeItem("authoken");
-          console.log(localStorage.getItem("authToken"))
+      localStorage.removeItem("authToken");
 
-        //   if (response.data.success) {
-        //     Notify.create({
-        //       message: response.data.message,
-        //       textColor: "white-5",
-        //       type: "positive",
-        //       actions: [
-        //         {
-        //           label: "Dismiss",
-        //           color: "white",
-        //           handler: () => {
-        //             /* ... */
-        //           },
-        //         },
-        //       ],
-        //     });
-
-        //     window.location.href = "/login";
-        //   } else {
-        //     console.log(response);
-        //   }
-        // })
-        // .catch((errors) => {
-        //   console.log(errors);
-        // });
-        });
-
+      console.log(localStorage.getItem("authToken"))
     },
 
     async getUser() {
       await api
         .get("/user", {
           headers: {
-            "Authorization": "Bearer " + localStorage.getItem("authToken"),
+            Authorization: "Bearer " + localStorage.getItem("authToken"),
           },
         })
         .then((response) => {
-          localStorage.getItem("authToken")
-          console.log(localStorage.getItem("authToken"))
+          localStorage.getItem("authToken");
+          console.log(localStorage.getItem("authToken"));
 
           this.user = response.data;
           console.log(this.user);
@@ -148,6 +164,11 @@ export const useAuthStore = defineStore("main", {
         .catch((errors) => {
           console.log(errors);
         });
+    },
+
+    setUser() {
+      let token = localStorage.getItem("authToken");
+      return token ? true : false;
     },
   },
 });

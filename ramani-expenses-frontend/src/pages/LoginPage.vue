@@ -1,4 +1,7 @@
 <template>
+<div class="alert alert-danger" role="alert" v-if="errorMessage">
+  {{errorMessage}}
+</div>
   <div class="q-pa-lg" style="max-width: 600px; margin: auto">
     <q-form @submit="loginUser" class="q-gutter-md" id="register-form">
       <q-input
@@ -30,6 +33,7 @@
 
 <script>
 import { useAuthStore } from "src/stores/auth.js";
+import { mapState } from "pinia";
 
 export default {
   data() {
@@ -40,13 +44,16 @@ export default {
       },
     };
   },
+  computed:{
+    ...mapState(useAuthStore, {
+      errorMessage: 'errorMessage'
+    })
+  },
   methods: {
     loginUser() {
       const authStore = useAuthStore();
       authStore.login(this.user);
-
     },
   },
-  computed: {},
 };
 </script>

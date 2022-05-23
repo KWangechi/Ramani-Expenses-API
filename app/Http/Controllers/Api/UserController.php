@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -42,7 +43,7 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
-        if (!($request->only('email', 'password'))) {
+        if (!(Auth::attempt($request->only('email', 'password')))) {
             return response()->json([
                 'success' => false,
                 'message' => "Credentials don't exist!!!",
@@ -50,7 +51,7 @@ class UserController extends Controller
             ]);
         }
 
-        $user = User::where('email', $request['email'])->firstOrFail();
+        $user = User::where('email', $request['email'])->first();
 
         return response()->json([
             'success' => true,
@@ -77,5 +78,7 @@ class UserController extends Controller
                 'status_code' => Response::HTTP_METHOD_NOT_ALLOWED
             ]);
         }
+
+        // dd(auth()->user());
     }
 }

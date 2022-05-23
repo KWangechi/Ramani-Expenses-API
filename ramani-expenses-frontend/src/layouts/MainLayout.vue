@@ -128,7 +128,7 @@ export default defineComponent({
     //   getUser: "getUser",
     // }),
   },
-  created() {
+  mounted() {
     this.getUser();
     console.log(this.store.user);
   },

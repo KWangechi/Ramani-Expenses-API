@@ -84,7 +84,6 @@
           @change="onFileChange()"
           label="Photo Receipt"
           accept=".jpg, .png, .jpeg"
-          :rules="[val => !!val || 'Field is required']"
 
         >
           <template v-slot:prepend>
