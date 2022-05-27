@@ -124,13 +124,24 @@ export default defineComponent({
     //   user: "user",
     // }),
 
-    // ...mapActions(useAuthStore, {
-    //   getUser: "getUser",
-    // }),
+    ...mapActions(useAuthStore, {
+      setUser: "setUser",
+      getUser: "getUser",
+    }),
   },
-  mounted() {
-    this.getUser();
-    console.log(this.store.user);
+  created() {
+    if(!this.store.setUser()){
+      this.$q.notify({
+        message: 'You need to login first',
+        textColor: "white-5",
+        type: "info",
+      })
+
+      this.$router.push('/login');
+    }
+
+    this.store.getUser();
+    // console.log(this.store.user);
   },
   methods: {
     logout() {
@@ -138,9 +149,9 @@ export default defineComponent({
       store.logout();
     },
 
-    async getUser() {
+    getUser() {
       const store = useAuthStore();
-      return store.getUser();
+      this.store.getUser();
     },
   },
   computed: {

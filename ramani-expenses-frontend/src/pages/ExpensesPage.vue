@@ -3,7 +3,8 @@
   <div class="text-h5 q-ml-md">
     Total Balance: {{ total_balance }}
   </div>
-  <q-table
+  <q-page class="large-screen-only">
+    <q-table
     class="my-sticky-header-table q-ma-md"
     title="My Expenses"
     :columns="columns"
@@ -11,6 +12,7 @@
     :rows="expenses"
     separator="cell"
     :pagination="pagination"
+    no-results-label="The filter didn't uncover any results"
   >
     <!-- search functionality -->
     <template v-slot:top-right>
@@ -26,6 +28,18 @@
         </template>
       </q-input>
     </template>
+
+    <template v-slot:no-data="{ icon, message, search }">
+        <div class="full-width row flex-center text-accent q-gutter-sm">
+          <q-icon size="2em" name="sentiment_dissatisfied" />
+          <span>
+            Well this is sad... {{ message }}
+          </span>
+          <q-icon size="2em" :name="search ? 'filter_b_and_w' : icon" />
+        </div>
+      </template>
+
+
 
     <template v-slot:body-cell-actions="props">
       <q-td :props="props">
@@ -69,7 +83,7 @@
           </q-card-section>
 
           <q-card-section class="q-pt-none">
-            Project Number: {{ expense.project_number }}
+            Project Number: {{ expense.project_no }}
           </q-card-section>
 
           <q-card-section class="q-pt-none">
@@ -118,13 +132,6 @@
     <q-card style="width: 550px">
       <div class="q-pa-lg" style="max-width: 600px; margin: auto">
         <q-form class="q-gutter-lg">
-          <q-input
-            outlined
-            v-model="expense.employee_name"
-            label="Employee Name"
-            id="employee_name"
-            name="employee_name"
-          />
           <q-input
             outlined
             v-model="expense.department"
@@ -228,6 +235,8 @@
   <q-page-sticky position="bottom-right" :offset="[18, 18]">
     <q-btn fab icon="add" color="blue" to="/create-expense" />
   </q-page-sticky>
+  </q-page>
+  
 </template>
 
 <script>
@@ -323,7 +332,7 @@ export default defineComponent({
       prompt: false,
       myPhoto: null,
       fileImageURL: "",
-      total_balance: null
+      total_balance: null,
     };
   },
 
@@ -347,27 +356,14 @@ export default defineComponent({
       getUser: 'getUser'
     })
   },
-  mounted() {
-    if(!this.setUser){
-      this.$q.notify({
-        message: 'You need to login first',
-        textColor: "white-5",
-        type: "info",
-      })
-
-      // window.location.href = '/login'
-
-      this.$router.push('/login');
-    }
-
-    this.getUser;
+  created() {
     this.getAllExpenses();
     this.getLatestBalance();
 
   },
   methods: {
-    async viewExpense(props) {
-      await api
+    viewExpense(props) {
+      api
         .get(`/expenses/${props.id}`, {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -385,7 +381,7 @@ export default defineComponent({
       this.medium = true;
     },
 
-    async getAllExpenses() {
+    getAllExpenses() {
       api
         .get("/expenses", {
           params: {
@@ -405,7 +401,7 @@ export default defineComponent({
     },
     editExpense(props) {
       api
-        .get(`/expenses/${props.row.id}`, {
+        .post(`/expenses/${props.row.id}`, {
           headers: {
             "Access-Control-Allow-Origin": "*",
             Authorization: "Bearer " + localStorage.getItem("authToken"),
@@ -462,34 +458,40 @@ export default defineComponent({
       });
     },
 
-    updateExpense(expense, updatedExpense) {
+    updateExpense(props) {
+      api
+        .post(`/expenses/${props.id}`, this.expense, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + localStorage.getItem("authToken")
+          },
+        })
+        .then((response) => {
+          this.expense = response.data.data
 
-      console.log(updatedExpense)
-      // api
-      //   .patch(`/expenses/${props.row.id}`, updatedExpense, {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   })
-      //   .then((response) => {
-      //     if (response.data.message) {
-      //       this.$q.notify({
-      //         message: response.data.message,
-      //         type: positive,
-      //       });
-      //       console.log(response);
-      //     } else {
-      //       this.$q.notify({
-      //         message: response.data.message,
-      //         type: negative,
-      //       });
-      //     }
-      //   })
-      //   .catch((errors) => {
-      //     console.log(errors);
-      //   });
+          console.log(response)
 
-      console.log(expense);
+          // if (response.data.message) {
+          //   this.$q.notify({
+          //     message: response.data.message,
+          //     type: "positive",
+          //   });
+          //   console.log(response);
+
+          //   window.location.href = '/expenses'
+
+          // } else {
+          //   this.$q.notify({
+          //     message: response.data.message,
+          //     type: "negative",
+          //   });
+          // }
+        })
+        .catch((errors) => {
+          console.log(errors);
+        });
+
+      // console.log(this.expense);
     },
     onFileChange() {
       const reader = new FileReader();

@@ -25,8 +25,8 @@ return new class extends Migration
             $table->string('expense_type');
             $table->string('transaction_type');
             $table->integer('total_balance')->default(0)->nullable();
-            $table->text('receipt_photo_name')->default("")->nullable();
-            $table->text('receipt_photo_path')->default("")->nullable();
+            $table->text('receipt_photo_name')->nullable();
+            $table->text('receipt_photo_path')->nullable();
             $table->date('date_issued');
 
             // $table->softDeletes();

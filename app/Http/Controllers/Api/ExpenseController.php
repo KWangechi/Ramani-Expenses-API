@@ -178,22 +178,25 @@ class ExpenseController extends Controller
                 'status_code' => Response::HTTP_NOT_FOUND
             ]);
         } else {
-            if (!($expense->update($request->all()))) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Something went wrong try again',
-                    'status_code' => Response::HTTP_REQUEST_TIMEOUT,
-
-                ]);
-            } else {
+            if (($expense->update($request->all()))) {
                 return response()->json([
                     'success' => true,
                     'message' => 'Expense updated successfully!!',
                     'status_code' => Response::HTTP_OK,
                     'data' => $expense
                 ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Something went wrong try again',
+                    'status_code' => Response::HTTP_REQUEST_TIMEOUT,
+                ]);
             }
+
+        // dd($request->all());
+        // dd($expense->update($request->all()));
         }
+
     }
 
     /**

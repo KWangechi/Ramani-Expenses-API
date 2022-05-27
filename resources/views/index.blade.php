@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html>
+  <!--
+    WARNING! Make sure that you match all Quasar related
+    tags to the same version! (Below it's "@2.7.1")
+  -->
 
-<head>
-    <base href=/>
-    <title>Ramani Expenses Project</title>
-    <meta charset=utf-8>
-    <meta name=description content="Frontend quasar project for ramani-expenses API">
-    <meta name=format-detection content="telephone=no">
-    <meta name=msapplication-tap-highlight content=no>
-    <meta name=viewport content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width">
-    <link rel=icon type=image/png sizes=128x128 href=icons/favicon-128x128.png>
-    <link rel=icon type=image/png sizes=96x96 href=icons/favicon-96x96.png>
-    <link rel=icon type=image/png sizes=32x32 href=icons/favicon-32x32.png>
-    <link rel=icon type=image/png sizes=16x16 href=icons/favicon-16x16.png>
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/eva-icons@^1.0.0/style/eva-icons.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/quasar@2.7.1/dist/quasar.css" rel="stylesheet" type="text/css">
+  </head>
 
-    <!-- import CSS -->
-<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
-<!-- import JavaScript -->
-<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+  <body>
+    <!-- example of injection point where you write your app template -->
+    <div id="q-app"></div>
 
+    <!-- Add the following at the end of your body tag -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quasar@2.7.1/dist/quasar.umd.js"></script>
+    
+    {{-- <script>
+      /*
+        Example kicking off the UI. Obviously, adapt this to your specific needs.
+        Assumes you have a <div id="q-app"></div> in your <body> above
+       */
+      const app = Vue.createApp({
+        setup () {
+          return {}
+        }
+      })
 
-    <link rel=icon type=image/ico href=favicon.ico>
-    <script defer src=/js/vendor.be1f70b0.js></script>
-    <script defer src=/js/app.11bde6a2.js></script>
-    <link href=/css/vendor.d1cdec9a.css rel=stylesheet>
-    <link href=/css/app.31d6cfe0.css rel=stylesheet>
-</head>
-
-<body>
-    <div id=q-app></div>
-</body>
-
+      app.use(Quasar)
+      app.mount('#q-app')
+    </script> --}}
+  </body>
 </html>
