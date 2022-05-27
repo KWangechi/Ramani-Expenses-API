@@ -1,11 +1,11 @@
-##Ramani Expenses Application
+#Ramani Expenses Application
 This is an application for tracking expenses used by Ramani Employees while they undertake their duties
 
-##Technologies Used
+#Technologies Used
 Back-end: PHP(Laravel)
 Front-end: CSS,HTML,Javascript(Vue JS), Quasar Framework
 
-##Requirements
+#Requirements
 1. Clone the project from GitHub
 2. npm install all the required packages
 3. php artisan key:generate to generete your application key
