@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Api\Expense;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,19 +21,39 @@ class ExpenseController extends Controller
     public function index(Request $request)
     {
         
-        $search = $request->input('search');
-        $expenses = Expense::query()
-            ->where('employee_name', 'LIKE', '%' . $search . '%')
-            ->orWhere('department', 'LIKE', '%' . $search . '%')
-            ->orWhere('department', 'LIKE', '%' . $search . '%')
-            ->orWhere('project_no', 'LIKE', '%' . $search . '%')
-            ->orWhere('description', 'LIKE', '%' . $search . '%')
-            ->orWhere('amount', 'LIKE', '%' . $search . '%')
-            ->orWhere('currency', 'LIKE', '%' . $search . '%')
-            ->orWhere('expense_type', 'LIKE', '%' . $search . '%')
-            ->orWhere('transaction_type', 'LIKE', '%' . $search . '%')
-            ->get()->where('user_id', auth()->user()->id);
+        // $search = $request->input('search');
 
+        //create a collection of expenses
+        $collection = collect(Expense::where('user_id', auth()->user()->id)->get());
+
+        // $expenses = Expense::query()
+        //     ->where('employee_name', 'LIKE', '%' . $search . '%')
+        //     ->orWhere('department', 'LIKE', '%' . $search . '%')
+        //     ->orWhere('department', 'LIKE', '%' . $search . '%')
+        //     ->orWhere('project_no', 'LIKE', '%' . $search . '%')
+        //     ->orWhere('description', 'LIKE', '%' . $search . '%')
+        //     ->orWhere('amount', 'LIKE', '%' . $search . '%')
+        //     ->orWhere('currency', 'LIKE', '%' . $search . '%')
+        //     ->orWhere('expense_type', 'LIKE', '%' . $search . '%')
+        //     ->orWhere('transaction_type', 'LIKE', '%' . $search . '%')
+        //     ->get();
+
+        $expenses = Expense::where('user_id', auth()->user()->id)->where(function ($query) use($request){
+            if(($search = $request->search)){
+                $query->orWhere('employee_name', 'LIKE', '%' . $search . '%')
+                ->orWhere('department', 'LIKE', '%' . $search . '%')
+                ->orWhere('department', 'LIKE', '%' . $search . '%')
+                ->orWhere('project_no', 'LIKE', '%' . $search . '%')
+                ->orWhere('description', 'LIKE', '%' . $search . '%')
+                ->orWhere('amount', 'LIKE', '%' . $search . '%')
+                ->orWhere('currency', 'LIKE', '%' . $search . '%')
+                ->orWhere('expense_type', 'LIKE', '%' . $search . '%')
+                ->orWhere('transaction_type', 'LIKE', '%' . $search . '%')
+                ->get();
+            }
+        })->get();
+        
+        // dd(($expenses));
 
         if ($expenses->count() == 0) {
             return response()->json([
@@ -48,6 +69,7 @@ class ExpenseController extends Controller
                 'data' => $expenses
             ]);
         }
+
     }
 
     /**

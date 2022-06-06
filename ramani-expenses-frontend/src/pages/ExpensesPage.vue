@@ -328,7 +328,18 @@ export default defineComponent({
       search: "",
       expenses: [],
       medium: false,
-      expense: {},
+      expense: {
+        department: "",
+        project_no: "",
+        description:"",
+        amount: "",
+        transaction_type: "",
+        expense_type: "",
+        currency: "",
+        receipt_photo: "",
+        date_issued: ""
+
+      },
       prompt: false,
       myPhoto: null,
       fileImageURL: "",
@@ -396,8 +407,12 @@ export default defineComponent({
             Authorization: "Bearer " + localStorage.getItem("authToken"),
           },
         })
-        .then(({ data: { data } }) => {
-          this.expenses = data;
+        .then(( response ) => {
+          this.expenses = response.data.data;
+
+          console.log(this.expenses)
+
+          // console.log()
         })
         .catch((errors) => {
           console.log(errors);
@@ -464,7 +479,7 @@ export default defineComponent({
 
     updateExpense(props) {
       api
-        .post(`/expenses/${props.id}`, this.expense, {
+        .patch(`/expenses/${props.id}`, this.expense, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + localStorage.getItem("authToken")
