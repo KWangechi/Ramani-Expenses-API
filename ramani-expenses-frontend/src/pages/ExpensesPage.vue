@@ -190,10 +190,10 @@
           <q-card-section class="q-pt-none">
             Receipt Photo
             <div>
-              <q-img
+              <!-- <q-img
                 :src="`http://127.0.0.1:8000/${expense.receipt_photo_path}`"
                 style="height: 240px; max-width: 350px"
-              />
+              /> -->
             </div>
           </q-card-section>
 
@@ -357,9 +357,13 @@ export default defineComponent({
     })
   },
   created() {
+    // this.getAllExpenses();
+
+  },
+
+  mounted(){
     this.getAllExpenses();
     this.getLatestBalance();
-
   },
   methods: {
     viewExpense(props) {
@@ -401,7 +405,7 @@ export default defineComponent({
     },
     editExpense(props) {
       api
-        .post(`/expenses/${props.row.id}`, {
+        .get(`/expenses/${props.row.id}`, {
           headers: {
             "Access-Control-Allow-Origin": "*",
             Authorization: "Bearer " + localStorage.getItem("authToken"),

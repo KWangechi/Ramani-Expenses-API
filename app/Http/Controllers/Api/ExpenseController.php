@@ -19,7 +19,7 @@ class ExpenseController extends Controller
      */
     public function index(Request $request)
     {
-
+        
         $search = $request->input('search');
         $expenses = Expense::query()
             ->where('employee_name', 'LIKE', '%' . $search . '%')
@@ -31,8 +31,7 @@ class ExpenseController extends Controller
             ->orWhere('currency', 'LIKE', '%' . $search . '%')
             ->orWhere('expense_type', 'LIKE', '%' . $search . '%')
             ->orWhere('transaction_type', 'LIKE', '%' . $search . '%')
-            ->where('user_id', auth()->user()->id)
-            ->get();
+            ->get()->where('user_id', auth()->user()->id);
 
 
         if ($expenses->count() == 0) {
