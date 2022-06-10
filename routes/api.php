@@ -29,7 +29,6 @@ Route::middleware(['auth:sanctum'])->prefix('expenses')->group(function () {
     Route::post('/{id}',  [App\Http\Controllers\Api\ExpenseController::class, 'update']);
     Route::delete('/{id}',  [App\Http\Controllers\Api\ExpenseController::class, 'destroy']);
 
-    Route::get('/download_excel', [App\Http\Controllers\Api\ExpenseController::class, 'convertToExcel']);
 });
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -38,3 +37,4 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 Route::get('/create_method', [App\Http\Controllers\Api\ExpenseController::class, 'create']);
 Route::get('/balance', [App\Http\Controllers\Api\ExpenseController::class, 'getLatestBalance']);
+Route::get('/download_excel', [App\Http\Controllers\Api\ExpenseController::class, 'convertToExcel'])->middleware('auth:sanctum');
