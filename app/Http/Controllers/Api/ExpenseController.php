@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exports\ExpenseExport;
 use App\Http\Controllers\Controller;
 use App\Models\Api\Expense;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response;
 
 class ExpenseController extends Controller
@@ -20,8 +22,6 @@ class ExpenseController extends Controller
      */
     public function index(Request $request)
     {
-        
-        // $search = $request->input('search');
 
         //create a collection of expenses
         $collection = collect(Expense::where('user_id', auth()->user()->id)->get());
@@ -52,7 +52,7 @@ class ExpenseController extends Controller
                 ->get();
             }
         })->get();
-        
+
         // dd(($expenses));
 
         if ($expenses->count() == 0) {
@@ -101,7 +101,7 @@ class ExpenseController extends Controller
         if($previous_balance == null){
             $this->total_balance = $request->amount;
         }
-        
+
         else{
             if ($request->transaction_type == "Money In") {
                 $this->total_balance = $previous_balance->total_balance + $request->amount;
@@ -167,7 +167,7 @@ class ExpenseController extends Controller
         if (!$expense) {
             return response()->json([
                 'success' => false,
-                'message' => 'No record found',
+                'message' => 'No record foun zd',
                 'status_code' => Response::HTTP_NOT_FOUND
             ]);
         } else {
@@ -259,7 +259,7 @@ class ExpenseController extends Controller
     {
         $total_balance = DB::table('expenses')->latest()->first()->total_balance;
         $currency = DB::table('expenses')->latest()->first()->currency;
-        
+
         return response()->json([
             'success' => true,
             'data' => $total_balance
@@ -268,7 +268,18 @@ class ExpenseController extends Controller
         // dd($total_balance);
     }
 
-    public function create(){
-        dd('This is my create method!!');
+    // public function create(){
+    //     dd('This is my create method!!');
+    // }
+
+    public function convertToExcel(){
+        $excel_file = Excel::download(new ExpenseExport, 'expenses_report.xlsx');;
+
+        return response()->json([
+            'success' => true,
+            'message' => 'File downloaded successfully',
+            'status_code' => Response::HTTP_OK,
+            'data' => $excel_file
+        ]);
     }
 }

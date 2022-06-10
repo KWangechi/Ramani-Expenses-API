@@ -28,6 +28,8 @@ Route::middleware(['auth:sanctum'])->prefix('expenses')->group(function () {
     Route::get('/{id}', [App\Http\Controllers\Api\ExpenseController::class, 'show']);
     Route::post('/{id}',  [App\Http\Controllers\Api\ExpenseController::class, 'update']);
     Route::delete('/{id}',  [App\Http\Controllers\Api\ExpenseController::class, 'destroy']);
+
+    Route::get('/download_excel', [App\Http\Controllers\Api\ExpenseController::class, 'convertToExcel']);
 });
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
