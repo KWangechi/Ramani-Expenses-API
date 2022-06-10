@@ -273,7 +273,7 @@ class ExpenseController extends Controller
     // }
 
     public function convertToExcel(){
-        $excel_file = Excel::download(new ExpenseExport, 'expenses_report.xlsx');;
+        $excel_file = Excel::download(new ExpenseExport, 'expenses_report.xlsx');
 
         // return response()->json([
         //     'success' => true,
@@ -282,6 +282,6 @@ class ExpenseController extends Controller
         //     'data' => $excel_file
         // ]);
 
-        dd($excel_file);
+        dd('new file');
     }
 }
