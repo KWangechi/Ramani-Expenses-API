@@ -274,7 +274,7 @@ class ExpenseController extends Controller
 
     public function convertToExcel(){
 
-        $excel_file = Excel::store(new ExpenseExport, 'expenses_report.xlsx');
+        return Excel::store(new ExpenseExport, 'expenses_report.xlsx');
 
         // return response()->json([
         //     'success' => true,
@@ -283,7 +283,8 @@ class ExpenseController extends Controller
         //     'data' => $excel_file
         // ]);
 
-        // dd('Download an excel file');
-        dd($excel_file);
+        // return dd('Download an excel file');
+        // dd($excel_file);
     }
+    
 }
